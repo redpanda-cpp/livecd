@@ -4,8 +4,10 @@ linux
 linux-firmware
 mkinitcpio
 mkinitcpio-archiso
+noto-fonts
 open-vm-tools
 pv
 qemu-guest-agent
 syslinux
-virtualbox-guest-utils-nox
+virtualbox-guest-utils
+weston
