@@ -1,5 +1,4 @@
 base
-cloud-init
 hyperv
 linux
 mkinitcpio
