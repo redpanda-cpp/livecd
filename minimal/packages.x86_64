@@ -4,10 +4,15 @@ linux
 linux-firmware
 mkinitcpio
 mkinitcpio-archiso
+nano
 noto-fonts
 open-vm-tools
 pv
 qemu-guest-agent
+qt5-wayland
+qterminal
+raylib
+redpanda-cpp-git
 syslinux
 virtualbox-guest-utils
 weston

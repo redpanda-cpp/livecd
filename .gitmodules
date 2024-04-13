@@ -1,0 +1,3 @@
+[submodule "aur/redpanda-cpp"]
+	path = aur/redpanda-cpp
+	url = https://aur.archlinux.org/redpanda-cpp.git
