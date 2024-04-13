@@ -16,3 +16,4 @@ redpanda-cpp-git
 syslinux
 virtualbox-guest-utils
 weston
+xorg-xwayland
