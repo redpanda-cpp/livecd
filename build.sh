@@ -19,22 +19,22 @@ function fn-check-deps() {
   mkdir -p "$_ROOT_DIR/repo" "$_ROOT_DIR/out"
 }
 
-function fn-build-aur-redpanda-cpp {
-  cd "$_ROOT_DIR/aur/redpanda-cpp"
+function fn-build-pkg-redpanda-cpp {
+  cd "$_ROOT_DIR/packages/redpanda-cpp"
   extra-x86_64-build
   cp redpanda-cpp-*-x86_64.pkg.tar.zst "$_ROOT_DIR/repo"
 }
 
 function fn-create-repo {
   cd "$_ROOT_DIR/repo"
-  repo-add aur.db.tar.gz $(ls *.pkg.tar.zst | sort --version-sort)
+  repo-add redpanda.db.tar.gz $(ls *.pkg.tar.zst | sort --version-sort)
 }
 
 function fn-create-profile {
   mkdir -p "$_TEMP_DIR/profile"
-  cp -r "$_ROOT_DIR"/minimal/* "$_TEMP_DIR/profile"
+  cp -r "$_ROOT_DIR"/profiles/minimal/* "$_TEMP_DIR/profile"
 
-  sed -i "s|__AUR_LOCAL_REPO_PATH__|$_ROOT_DIR/repo|" "$_TEMP_DIR/profile/pacman.conf"
+  sed -i "s|__REDPANDA_LOCAL_REPO_PATH__|$_ROOT_DIR/repo|" "$_TEMP_DIR/profile/pacman.conf"
 }
 
 function fn-make-iso() {
@@ -43,7 +43,7 @@ function fn-make-iso() {
 
 
 fn-check-deps
-# fn-build-aur-redpanda-cpp
+fn-build-pkg-redpanda-cpp
 fn-create-repo
 fn-create-profile
 fn-make-iso

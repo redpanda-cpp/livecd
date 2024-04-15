@@ -12,7 +12,7 @@ qemu-guest-agent
 qt5-wayland
 qterminal
 raylib
-redpanda-cpp-git
+redpanda-cpp
 syslinux
 virtualbox-guest-utils
 weston

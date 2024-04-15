@@ -1,0 +1,58 @@
+_pkgname=RedPanda-CPP
+_gitobj="commit=4d07ed6b481020d6c2cc1a4370cabdbce48b81f9"
+pkgname=${_pkgname,,}
+pkgver=2.26.r477.g4d07ed6b
+pkgrel=1
+pkgdesc='A fast, lightweight, open source, and cross platform C++ IDE (development version)'
+arch=('i686' 'pentium4' 'x86_64' 'arm' 'armv6h' 'armv7h' 'aarch64' 'riscv64')
+url="https://github.com/royqh1979/$_pkgname"
+license=('GPL3')
+depends=(qt5-base qt5-svg gcc gdb)
+makedepends=(git qt5-tools imagemagick librsvg)
+optdepends=(
+    'clang: C/C++ compiler (alternative)'
+)
+conflicts=("${_pkgname,,}")
+provides=("${_pkgname,,}")
+source=(
+    "git+$url.git#$_gitobj"
+    'compiler_hint.lua'
+)
+sha256sums=('929eaf80915efdfc4375e5fecc0f04d9bb38df22eea1981d795abdb5385016f4'
+            '207f409d93100575e1d01842475880f6a78f095680246d98e61e72d272671448')
+
+pkgver() {
+    cd "$_pkgname"
+    git describe --long --tags | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+    sed -i '/CONFIG += ENABLE_LUA_ADDON/ { s/^#\s*// }' RedPanda-CPP/RedPandaIDE/RedPandaIDE.pro
+}
+
+build() {
+    mkdir redpanda-build
+    cd redpanda-build
+    qmake \
+        PREFIX='/usr' \
+        LIBEXECDIR='/usr/lib' \
+        "$srcdir/$_pkgname/Red_Panda_CPP.pro"
+    make
+}
+
+package() {
+    local _libexecdir="$pkgdir/usr/lib/RedPandaCPP"
+    install -Dm644 "compiler_hint.lua" "$_libexecdir/compiler_hint.lua"
+
+    cd redpanda-build
+    make INSTALL_ROOT="$pkgdir" install
+
+    for size in 16 22 24 32 36 48 64 72 96 128 192 256 512; do
+        mkdir -p "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps"
+        magick convert \
+            -background none \
+            "$pkgdir/usr/share/icons/hicolor/scalable/apps/redpandaide.svg" \
+            -resize ${size}x${size} \
+            "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/redpandaide.png"
+    done
+}
