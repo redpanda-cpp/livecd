@@ -3,7 +3,7 @@
 set -euxo pipefail
 
 _ROOT_DIR="$(pwd)"
-_TEMP_DIR="$(TEMPLATE=redpanda-livecd mktemp -d)"
+_TEMP_DIR="$(mktemp -d --tmpdir redpanda-livecd.XXXXXX)"
 
 _SUDO=""
 [[ $EUID -ne 0 ]] && _SUDO="sudo"
@@ -41,9 +41,14 @@ function fn-make-iso() {
   $_SUDO mkarchiso -v -w "$_TEMP_DIR/work" -o "$_ROOT_DIR/out" "$_TEMP_DIR/profile"
 }
 
+function fn-clean() {
+  $_SUDO rm -rf "$_TEMP_DIR"
+}
+
 
 fn-check-deps
 fn-build-pkg-redpanda-cpp
 fn-create-repo
 fn-create-profile
 fn-make-iso
+fn-clean
